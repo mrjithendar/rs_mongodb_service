@@ -27,9 +27,9 @@ pipeline {
 
         stage ('Build Docker Images') {
             steps {
-                sh "docker build -t roboshop-${service} ."
-                sh "docker tag roboshop-${service}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-${service}:latest"
-                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-${service}:latest"
+                sh "docker build -t ${service} ."
+                sh "docker tag ${service}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${service}:latest"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${service}:latest"
             }
         }
     }
