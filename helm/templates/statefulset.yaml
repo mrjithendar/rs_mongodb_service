@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: roboshop
+  labels:
+    app: mongodb
+    purpose: roboshop
+spec:
+  serviceName: mongodb
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+        selector: mongodb
+    spec:
+      containers:
+      - name: mongodb        
+        image: {{ .Values.mongodb.image }}
+        volumeMounts:
+        - name: mongod-conf
+          mountPath: /config
+          readOnly: true
+        - name: mongodb-dbs
+          mountPath: /docker-entrypoint-initdb.d
+          readOnly: true
+        - name: mongodb-data
+          mountPath: /data/dbda
+      volumes:
+      - name: mongod-conf
+        configMap:
+          name: mongodb-configmap
+          items:
+          - key: mongo.conf
+            path: mongo.conf
+      - name: mongodb-dbs
+        configMap:
+          name: mongodb-configmap
+          items:
+            - key: users.js
+              path: users.js
+            - key: catalogue.js
+              path: catalogue.js
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: mongodb-pvc
