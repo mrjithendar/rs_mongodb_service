@@ -12,7 +12,8 @@ pipeline {
         AWS_ACCOUNT_ID = "826334059644"
         vault = credentials('vaultToken')
         tfvars = "vars/${params.Options}.tfvars"
-        eks_cluster_name = "roboshop-eks-cluster-int"
+        eks_cluster_name = "dkode-eks-cluster-demo"
+        service = "mongodb_demo"
     }
 
     stages {
@@ -25,14 +26,10 @@ pipeline {
         }
 
         stage ('Build Docker Images') {
-            stage ("Build mongodb Docker Image") {
-                    steps {
-                        dir("Docker/mongodb") {
-                            sh "docker build -t roboshop-mongodb-int ."
-                            sh "docker tag roboshop-mongodb-int:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-mongodb-int:latest"
-                            sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-mongodb-int:latest"
-                    }
-                }
+            steps {
+                sh "docker build -t roboshop-${service} ."
+                sh "docker tag roboshop-${service}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-${service}:latest"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/roboshop-${service}:latest"
             }
         }
     }
