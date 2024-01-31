@@ -8,7 +8,7 @@ metadata:
     purpose: roboshop
 spec:
   serviceName: mongodb
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: mongodb
@@ -26,6 +26,13 @@ spec:
       containers:
         - name: mongodb
           image: mongo:latest
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
           volumeMounts:
             - name: mongod-conf
               mountPath: /config
