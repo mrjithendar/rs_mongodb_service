@@ -6,4 +6,7 @@ metadata:
 provisioner: kubernetes.io/aws-ebs
 parameters:
   type: gp2
-  zone: us-east-1a
+  # zone: us-east-1a # volume mounting failed due to availability zone of volume and instance
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
