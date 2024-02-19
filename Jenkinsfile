@@ -17,15 +17,9 @@ pipeline {
     }
 
     stages {
-
-        stage ('EKS Acthenticate') {
-            steps {
-                sh "aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${eks_cluster_name}"
-            }
-        }
-
         stage ('Deploy App') {
             steps {
+                sh "aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${eks_cluster_name}"
                 sh "curl -LO https://raw.githubusercontent.com/mrjithendar/tools/master/namespace.sh"
                 sh "sh namespace.sh"
                 sh "kubectl apply -f k8s/deployment.yml"
