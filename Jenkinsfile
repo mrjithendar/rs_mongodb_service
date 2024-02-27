@@ -22,11 +22,11 @@ pipeline {
                 sh "aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${eks_cluster_name}"
                 sh "curl -LO https://raw.githubusercontent.com/mrjithendar/tools/master/namespace.sh"
                 sh "sh namespace.sh"
-                sh "kubectl apply -f k8s/deployment.yml"
-                sh "kubectl apply -f k8s/service.yml"
                 sh "kubectl apply -f k8s/configmap.yml"
                 sh "kubectl apply -f k8s/pvc.yml"
                 sh "kubectl apply -f k8s/storageclass.yml"
+                sh "kubectl apply -f k8s/deployment.yml"
+                sh "kubectl apply -f k8s/service.yml"
             }
         }
     }
